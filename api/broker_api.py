@@ -5,9 +5,6 @@ API_PATH = "/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice"
 
 
 def get_price_and_volume(token: str, stock_code: str = "005930"):
-    """
-    한국투자증권 API에서 현재가(stck_prpr)와 누적거래량(acml_vol) 조회
-    """
     url = BASE_URL + API_PATH
     headers = {
         "authorization": f"Bearer {token}",
@@ -28,11 +25,10 @@ def get_price_and_volume(token: str, stock_code: str = "005930"):
     # print("📡 API Raw Response:", data)
 
     if "output2" in data and len(data["output2"]) > 0:
-        last = data["output2"][-1]
         return {
-            "price": last.get("stck_prpr"),
+            "price": data["output1"].get("stck_prpr"),
             "volume": data["output1"].get("acml_vol"),
-            "time": last.get("stck_cntg_hour")
+
         }
 
     else:
