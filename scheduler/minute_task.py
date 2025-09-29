@@ -13,6 +13,6 @@ def start_scheduler(token: str):
         else:
             print("데이터 없음")
 
-    # scheduler.add_job(job, "interval", minutes=1)
-    scheduler.add_job(job, "interval", seconds=1)
+    # scheduler.add_job(job, "interval", seconds=1)
+    scheduler.add_job(job, "cron", second=0)
     scheduler.start()

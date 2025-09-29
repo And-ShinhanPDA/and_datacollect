@@ -19,5 +19,7 @@ def start_daily_scheduler(token: str):
             print("데이터 없음")
 
     # 테스트: 1초마다 실행
-    scheduler.add_job(job, "interval", seconds=1)
+    # scheduler.add_job(job, "interval", seconds=1)
+    scheduler.add_job(job, "cron", hour=9, minute=0, second=1)
+
     scheduler.start()
