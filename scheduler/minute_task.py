@@ -1,11 +1,14 @@
+from datetime import datetime, timedelta, time as dtime
 from apscheduler.schedulers.background import BackgroundScheduler
 from api.broker_api import get_price_and_volume
+from api.minute_api import get_minute_for_chart
 from config import STOCK_CODES
 import time
 import logging
 
 from model.candle import MinuteCandle
 from publisher.data_publisher import send_minute_data
+from publisher.data_publisher import send_minute_chart_data
 
 logger = logging.getLogger(__name__)
 
@@ -31,4 +34,32 @@ def start_scheduler(token: str):
     # 매 분 정각 실행
     scheduler.add_job(job, "cron", second=0)
 
-    scheduler.start()
+    # scheduler.start()
+
+    def job2():
+        now = datetime.now()
+        if not (dtime(9, 0) <= now.time() <= dtime(15, 30)):
+            logger.info(f"[{now.strftime('%H:%M:%S')}] 장 외 시간 - 요청 스킵")
+            return
+
+        target_time = (now - timedelta(minutes=1)).strftime("%H%M")
+
+        for code in STOCK_CODES:
+            try:
+                logger.info(f"📡 {code} - {target_time} 시각 데이터 요청 중")
+                result = get_minute_for_chart(
+                    token, stock_code=code, time=target_time)
+
+                if result:
+                    send_minute_chart_data(result)
+                else:
+                    logger.warning(f"⚠️ {code} 데이터 없음")
+
+                time.sleep(1)
+
+            except Exception as e:
+                logger.error(f"❌ {code} 요청 실패: {e}")
+                time.sleep(1)
+
+        scheduler.add_job(job2, "cron", minute="*", second=10)
+        scheduler.start()
