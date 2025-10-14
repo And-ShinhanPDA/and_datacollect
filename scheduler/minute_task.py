@@ -61,5 +61,6 @@ def start_scheduler(token: str):
                 logger.error(f"❌ {code} 요청 실패: {e}")
                 time.sleep(1)
 
-        scheduler.add_job(job2, "cron", minute="*", second=10)
-        scheduler.start()
+    scheduler.add_job(job2, "cron", second=0)
+
+    scheduler.start()
