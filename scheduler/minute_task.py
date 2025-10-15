@@ -26,6 +26,7 @@ def start_scheduler(token: str):
                     volume=result["volume"]
                 )
                 logger.info(f"[MinuteTask] Collected: {candle}")
+                # print("job1 실행")
                 send_minute_data(candle)
             else:
                 logger.warning(f"⚠️ 데이터 없음: {code}")
@@ -37,12 +38,14 @@ def start_scheduler(token: str):
     # scheduler.start()
 
     def job2():
+        # print("job2 시작")
         now = datetime.now()
-        if not (dtime(9, 0) <= now.time() <= dtime(15, 30)):
-            logger.info(f"[{now.strftime('%H:%M:%S')}] 장 외 시간 - 요청 스킵")
-            return
+        # if not (dtime(9, 0) <= now.time() <= dtime(15, 30)):
+        #     logger.info(f"[{now.strftime('%H:%M:%S')}] 장 외 시간 - 요청 스킵")
+        #     return
 
         target_time = (now - timedelta(minutes=1)).strftime("%H%M")
+        # target_time = "153000"
 
         for code in STOCK_CODES:
             try:
@@ -51,6 +54,9 @@ def start_scheduler(token: str):
                     token, stock_code=code, time=target_time)
 
                 if result:
+                    result["stock_code"] = code
+                    print(result)
+                    # print("job2 실행")
                     send_minute_chart_data(result)
                 else:
                     logger.warning(f"⚠️ {code} 데이터 없음")
@@ -61,6 +67,6 @@ def start_scheduler(token: str):
                 logger.error(f"❌ {code} 요청 실패: {e}")
                 time.sleep(1)
 
-    scheduler.add_job(job2, "cron", second=0)
+    # scheduler.add_job(job2, "cron", second=0)
 
     scheduler.start()
