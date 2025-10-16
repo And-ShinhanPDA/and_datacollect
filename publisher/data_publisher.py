@@ -1,7 +1,7 @@
 import requests
 import logging
 
-SPRING_BASE_URL = "http://43.203.153.18/process/api/ingest/minute"
+SPRING_BASE_URL = "http://43.203.153.18/process/api/ingest"
 
 logger = logging.getLogger(__name__)
 
