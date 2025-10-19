@@ -32,7 +32,7 @@ def start_daily_scheduler(token: str):
             time.sleep(1)
 
     # 테스트: 30초마다 실행
-    scheduler.add_job(job, "interval", seconds=30)
+    scheduler.add_job(job, "cron", second=0)
     # 실제 운영: 매일 9시 정각
     # scheduler.add_job(job, "cron", hour=9, minute=0, second=1)
 

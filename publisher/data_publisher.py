@@ -1,6 +1,7 @@
 import requests
 import logging
 
+
 SPRING_BASE_URL = "http://43.203.153.18/process/api/ingest"
 
 logger = logging.getLogger(__name__)
@@ -24,3 +25,13 @@ def send_daily_data(daily_snapshot):
         logger.info(f"[SUCCESS] Daily data sent: {res.text}")
     except Exception as e:
         logger.error(f"[ERROR] Failed to send daily data: {e}")
+
+
+def send_minute_chart_data(minute_chart_item):
+    url = f"{SPRING_BASE_URL}/minute/chart"
+    try:
+        res = requests.post(url, json=minute_chart_item, timeout=5)
+        res.raise_for_status()
+        logger.info(f"[SUCCESS] Chart minute data sent: {res.text}")
+    except Exception as e:
+        logger.error(f"[ERROR] Failed to send chart minute data: {e}")
