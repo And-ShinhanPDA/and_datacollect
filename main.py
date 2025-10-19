@@ -6,7 +6,8 @@ import requests
 
 app = FastAPI()
 
-SPRING_URL = "http://localhost:8082/api/test/ping"
+# SPRING_URL = "http://localhost:8082/api/test/ping"
+SPRING_URL = "http://43.203.153.18/process/api/test/ping"
 
 
 @app.get("/ping-to-spring")

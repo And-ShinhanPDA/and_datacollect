@@ -1,7 +1,8 @@
 import requests
 import logging
 
-SPRING_BASE_URL = "http://localhost:8082/api/ingest"
+# SPRING_BASE_URL = "http://localhost:8082/api/ingest"
+SPRING_BASE_URL = "http://43.203.153.18/process/api/test/ping"
 
 logger = logging.getLogger(__name__)
 
