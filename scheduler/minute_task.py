@@ -20,10 +20,6 @@ def start_scheduler(token: str):
     scheduler = BackgroundScheduler()
 
     def job():
-        now = datetime.now(KST)
-        if not (dtime(9, 0) <= now.time() <= dtime(15, 31)):
-            logger.info(f"[{now.strftime('%H:%M:%S')}] 장 외 시간 - 요청 스킵")
-            return
         for code in STOCK_CODES:
             result = get_price_and_volume(token, stock_code=code)
             if result:
