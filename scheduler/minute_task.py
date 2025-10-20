@@ -1,3 +1,4 @@
+import pytz
 from datetime import datetime, timedelta, time as dtime
 from apscheduler.schedulers.background import BackgroundScheduler
 from api.broker_api import get_price_and_volume
@@ -10,6 +11,8 @@ from model.candle import MinuteCandle
 from publisher.data_publisher import send_minute_data
 from publisher.data_publisher import send_minute_chart_data
 
+KST = pytz.timezone("Asia/Seoul")
+
 logger = logging.getLogger(__name__)
 
 
@@ -17,7 +20,7 @@ def start_scheduler(token: str):
     scheduler = BackgroundScheduler()
 
     def job():
-        now = datetime.now()
+        now = datetime.now(KST)
         if not (dtime(9, 0) <= now.time() <= dtime(15, 31)):
             logger.info(f"[{now.strftime('%H:%M:%S')}] 장 외 시간 - 요청 스킵")
             return
@@ -43,7 +46,7 @@ def start_scheduler(token: str):
 
     def job2():
         # print("job2 시작")
-        now = datetime.now()
+        now = datetime.now(KST)
         if not (dtime(9, 0) <= now.time() <= dtime(15, 31)):
             logger.info(f"[{now.strftime('%H:%M:%S')}] 장 외 시간 - 요청 스킵")
             return
